@@ -1,0 +1,19 @@
+:root {
+  --font-primary: "42dot Sans";
+  --font-secondary: "Mauline";
+  --font-tertiary : "Ballega";
+
+  --container-size: 1600px;
+  --header-height: 65px;
+  --bg-color: #8298e4;
+  --bg-color-i: #f0d9bd;
+  --bg-color-ii: #928eb9;
+  --bg-color-iii: #dba879;
+  --bg-color-xi: #1f4699;
+  --bg-color-xii: #1e1e58;
+  --bg-color-xxi: #dfe8f1;
+  --bg-primary-transpant: #0d09504d;
+  --bg-light-blue : #eff7ff;
+
+  --section-space : 60px;
+}
