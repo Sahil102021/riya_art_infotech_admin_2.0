@@ -5,7 +5,6 @@ const Dashboard = () => {
   return (
     <div>
       <MainDrawer>
-        
         Dashboard
       </MainDrawer>
     </div>

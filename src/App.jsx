@@ -9,6 +9,8 @@ import Loader from "./components/Loader";
 import { useLoader } from "./context/Context";
 import { ToastContainer } from "react-toastify";
 import "./App.css";
+import NotFoundPage from "./pages/NotFoundPage";
+import Secure from "./components/Secure";
 
 const AppContent = () => {
   const { loading } = useLoader();
@@ -19,8 +21,9 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/product" element={<ProductDetail />} />
+        <Route path="/dashboard" element={<Secure><Dashboard /></Secure>} />
+        <Route path="/product" element={<Secure><ProductDetail /></Secure>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );

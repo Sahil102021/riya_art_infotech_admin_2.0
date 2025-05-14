@@ -5,18 +5,17 @@ import {
   TextField,
   Typography,
   Button,
-  Paper,
   useTheme,
 } from "@mui/material";
-import { Data_security_01, flower, signupPageImg } from "../assets/images";
+import { flower } from "../../assets/images";
 import { useFormik } from "formik";
-import { useLoader } from "../context/Context";
+import { useLoader } from "../../context/Context";
+import axios from "axios";
+import { adminSignup } from "../../actions/auth/auth.action";
 import { toast } from "react-toastify";
-import { adminLogin } from "../actions/auth";
-import { useNavigate } from "react-router-dom";
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 
-
-const LoginPage = () => {
+const SignupPage = () => {
   let Navigate = useNavigate();
   const theme = useTheme();
   const { setLoading } = useLoader();
@@ -26,38 +25,46 @@ const LoginPage = () => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
-
     return () => clearTimeout(timer);
   }, [setLoading]);
 
   const formik = useFormik({
     initialValues: {
+      firstname: "",
+      lastname: "",
+      contact: "",
+      username: "",
       email: "",
       password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("Invalied Email").required("Please Enter A Email"),
-      password: Yup.string().min(6, "Mininum 6 characters").required("Please Enter A Password"),
+      firstname: Yup.string().required("Please enter your first name"),
+      lastname: Yup.string().required("Please enter your last name"),
+      contact: Yup.string().matches(/^[0-9]{10}$/, "Contact must be 10 digits").required("Please enter a contact number"),
+      username: Yup.string().required("Please enter a username"),
+      email: Yup.string().email("Invalid email").required("Please enter your email"),
+      password: Yup.string().min(6, "Minimum 6 characters").required("Please enter a password"),
     }),
     onSubmit: async (values) => {
       try {
-        const loginResponse = await adminLogin(values);
-        console.log(loginResponse);
-        console.log(loginResponse?.status);
-        console.log(loginResponse?.token);
-        if (loginResponse?.status === 200) {
-         let token = localStorage.setItem("token", loginResponse?.token);
+        let signupResponse = await adminSignup(values);
+        console.log(signupResponse?.data)
+        console.log(signupResponse?.token)
+        if(signupResponse?.status === 200) {
+          let token = localStorage.setItem('token', signupResponse?.token);
         }
         Navigate('/dashboard');
       } catch (error) {
         toast.error(error.message);
-        throw new Error("login page => ", error);
+        // throw new Error("signup page => ", error);
+        
       }
     },
   });
 
   return (
     <Box sx={{ width: "100%", display: "flex", minHeight: "100vh" }}>
+      {/* Left Side Image */}
       <Box
         sx={{
           width: { xs: "0%", md: "65%" },
@@ -68,8 +75,8 @@ const LoginPage = () => {
       >
         <Box
           component="img"
-          src={Data_security_01}
-          alt="Security"
+          src={flower}
+          alt="Signup Banner"
           sx={{
             width: "100%",
             height: "100%",
@@ -78,6 +85,7 @@ const LoginPage = () => {
         />
       </Box>
 
+      {/* Form Section */}
       <Box
         sx={{
           width: { xs: "100%", md: "35%" },
@@ -95,16 +103,10 @@ const LoginPage = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "0px",
               margin: "auto",
             }}
           >
-            <Typography
-              component="h1"
-              variant="h4"
-              fontWeight="bold"
-              gutterBottom
-            >
+            <Typography component="h1" variant="h4" fontWeight="bold" gutterBottom>
               Welcome To Riya Art Infotech
             </Typography>
 
@@ -115,14 +117,59 @@ const LoginPage = () => {
             <TextField
               margin="normal"
               fullWidth
+              label="First Name"
+              name="firstname"
+              autoComplete="firstname"
+              autoFocus
+              {...formik.getFieldProps("firstname")}
+              error={formik.touched.firstname && Boolean(formik.errors.firstname)}
+              helperText={formik.touched.firstname && formik.errors.firstname}
+            />
+
+            <TextField
+              margin="normal"
+              fullWidth
+              label="Last Name"
+              name="lastname"
+              autoComplete="lastname"
+              {...formik.getFieldProps("lastname")}
+              error={formik.touched.lastname && Boolean(formik.errors.lastname)}
+              helperText={formik.touched.lastname && formik.errors.lastname}
+            />
+
+            <TextField
+              margin="normal"
+              fullWidth
+              label="Contact Number"
+              name="contact"
+              autoComplete="contact"
+              {...formik.getFieldProps("contact")}
+              error={formik.touched.contact && Boolean(formik.errors.contact)}
+              helperText={formik.touched.contact && formik.errors.contact}
+            />
+
+            <TextField
+              margin="normal"
+              fullWidth
+              label="Username"
+              name="username"
+              autoComplete="username"
+              {...formik.getFieldProps("username")}
+              error={formik.touched.username && Boolean(formik.errors.username)}
+              helperText={formik.touched.username && formik.errors.username}
+            />
+
+            <TextField
+              margin="normal"
+              fullWidth
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
               {...formik.getFieldProps("email")}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
             />
+
             <TextField
               margin="normal"
               fullWidth
@@ -140,14 +187,15 @@ const LoginPage = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={formik.isSubmitting}
             >
-              Sign In
+              Sign Up
             </Button>
 
             <Typography variant="body2" color="text.secondary">
-              Don’t have an account?{" "}
+              Already have an account?{" "}
               <Button variant="text" size="small">
-                Sign Up
+                Sign In
               </Button>
             </Typography>
           </Box>
@@ -157,4 +205,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;

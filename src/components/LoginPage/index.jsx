@@ -5,17 +5,19 @@ import {
   TextField,
   Typography,
   Button,
+  Paper,
   useTheme,
 } from "@mui/material";
-import { flower } from "../assets/images";
+import { Data_security_01, flower, signupPageImg } from "../../assets/images";
 import { useFormik } from "formik";
-import { useLoader } from "../context/Context";
-import axios from "axios";
-import { adminSignup } from "../actions/auth/auth.action";
+import { useLoader } from "../../context/Context";
 import { toast } from "react-toastify";
-import { Navigate, redirect, useNavigate } from "react-router-dom";
+import { adminLogin } from "../../actions/auth";
+import { useNavigate } from "react-router-dom";
+import { setToken } from "../../Reducers/productSlice";
 
-const SignupPage = () => {
+
+const LoginPage = () => {
   let Navigate = useNavigate();
   const theme = useTheme();
   const { setLoading } = useLoader();
@@ -25,46 +27,39 @@ const SignupPage = () => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
+
     return () => clearTimeout(timer);
   }, [setLoading]);
 
   const formik = useFormik({
     initialValues: {
-      firstname: "",
-      lastname: "",
-      contact: "",
-      username: "",
       email: "",
       password: "",
     },
     validationSchema: Yup.object({
-      firstname: Yup.string().required("Please enter your first name"),
-      lastname: Yup.string().required("Please enter your last name"),
-      contact: Yup.string().matches(/^[0-9]{10}$/, "Contact must be 10 digits").required("Please enter a contact number"),
-      username: Yup.string().required("Please enter a username"),
-      email: Yup.string().email("Invalid email").required("Please enter your email"),
-      password: Yup.string().min(6, "Minimum 6 characters").required("Please enter a password"),
+      email: Yup.string().email("Invalied Email").required("Please Enter A Email"),
+      password: Yup.string().min(6, "Mininum 6 characters").required("Please Enter A Password"),
     }),
     onSubmit: async (values) => {
       try {
-        let signupResponse = await adminSignup(values);
-        console.log(signupResponse?.data)
-        console.log(signupResponse?.token)
-        if(signupResponse?.status === 200) {
-          let token = localStorage.setItem('token', signupResponse?.token);
+        const loginResponse = await adminLogin(values);
+        console.log(loginResponse);
+        console.log(loginResponse?.status);
+        console.log(loginResponse?.token);
+        if (loginResponse?.status === 200) {
+         let token = localStorage.setItem("token", loginResponse?.token);
+         setToken(token);
         }
         Navigate('/dashboard');
       } catch (error) {
         toast.error(error.message);
-        // throw new Error("signup page => ", error);
-        
+        throw new Error("login page => ", error);
       }
     },
   });
 
   return (
     <Box sx={{ width: "100%", display: "flex", minHeight: "100vh" }}>
-      {/* Left Side Image */}
       <Box
         sx={{
           width: { xs: "0%", md: "65%" },
@@ -75,8 +70,8 @@ const SignupPage = () => {
       >
         <Box
           component="img"
-          src={flower}
-          alt="Signup Banner"
+          src={Data_security_01}
+          alt="Security"
           sx={{
             width: "100%",
             height: "100%",
@@ -85,7 +80,6 @@ const SignupPage = () => {
         />
       </Box>
 
-      {/* Form Section */}
       <Box
         sx={{
           width: { xs: "100%", md: "35%" },
@@ -103,10 +97,16 @@ const SignupPage = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              gap: "0px",
               margin: "auto",
             }}
           >
-            <Typography component="h1" variant="h4" fontWeight="bold" gutterBottom>
+            <Typography
+              component="h1"
+              variant="h4"
+              fontWeight="bold"
+              gutterBottom
+            >
               Welcome To Riya Art Infotech
             </Typography>
 
@@ -117,59 +117,14 @@ const SignupPage = () => {
             <TextField
               margin="normal"
               fullWidth
-              label="First Name"
-              name="firstname"
-              autoComplete="firstname"
-              autoFocus
-              {...formik.getFieldProps("firstname")}
-              error={formik.touched.firstname && Boolean(formik.errors.firstname)}
-              helperText={formik.touched.firstname && formik.errors.firstname}
-            />
-
-            <TextField
-              margin="normal"
-              fullWidth
-              label="Last Name"
-              name="lastname"
-              autoComplete="lastname"
-              {...formik.getFieldProps("lastname")}
-              error={formik.touched.lastname && Boolean(formik.errors.lastname)}
-              helperText={formik.touched.lastname && formik.errors.lastname}
-            />
-
-            <TextField
-              margin="normal"
-              fullWidth
-              label="Contact Number"
-              name="contact"
-              autoComplete="contact"
-              {...formik.getFieldProps("contact")}
-              error={formik.touched.contact && Boolean(formik.errors.contact)}
-              helperText={formik.touched.contact && formik.errors.contact}
-            />
-
-            <TextField
-              margin="normal"
-              fullWidth
-              label="Username"
-              name="username"
-              autoComplete="username"
-              {...formik.getFieldProps("username")}
-              error={formik.touched.username && Boolean(formik.errors.username)}
-              helperText={formik.touched.username && formik.errors.username}
-            />
-
-            <TextField
-              margin="normal"
-              fullWidth
               label="Email Address"
               name="email"
               autoComplete="email"
+              autoFocus
               {...formik.getFieldProps("email")}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
             />
-
             <TextField
               margin="normal"
               fullWidth
@@ -187,15 +142,14 @@ const SignupPage = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              disabled={formik.isSubmitting}
             >
-              Sign Up
+              Sign In
             </Button>
 
             <Typography variant="body2" color="text.secondary">
-              Already have an account?{" "}
+              Don’t have an account?{" "}
               <Button variant="text" size="small">
-                Sign In
+                Sign Up
               </Button>
             </Typography>
           </Box>
@@ -205,4 +159,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default LoginPage;
