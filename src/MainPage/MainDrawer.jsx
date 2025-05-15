@@ -17,6 +17,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { NavLink } from "react-router-dom";
+import SplitButton from "../components/SplitButton";
+import { logo1, logo2, logo3 } from "../assets/images";
 
 const drawerWidth = 240;
 
@@ -55,9 +57,16 @@ function MainDrawer(props) {
 
   const drawer = (
     <div>
-      <Toolbar />
+      <Toolbar >
+        <Box sx={{width:'40px' ,height:"40px", overflow:"hidden" , borderRadius:'50%'}}>
+          <img src={logo1} width="100%" height="100%" alt="" />
+        </Box>
+        <Typography sx={{fontWeight :"600" , paddingLeft:"5px"}}>
+          Riya Art Infotech
+        </Typography>
+      </Toolbar>
       <Divider />
-      <List sx={{padding:0}}>
+      <List sx={{ padding: 0 }}>
         {ManuData.map((text, index) => (
           <NavLink
             to={text.link}
@@ -65,12 +74,12 @@ function MainDrawer(props) {
             style={({ isActive }) => ({
               textDecoration: "none",
               color: "inherit",
-              
-            })}
-          >
-            <ListItem disablePadding sx={{borderBottom: "1px solid lightgray",}}>
+            })} >
+            <ListItem
+              disablePadding
+              sx={{ borderBottom: "1px solid lightgray" }} >
               <ListItemButton
-              className="font-primary font-size-xl"
+                className="font-primary font-size-xl"
                 sx={({ palette }) => ({
                   position: "relative",
                   px: 2,
@@ -95,7 +104,6 @@ function MainDrawer(props) {
                     bgcolor: "#f5faff",
                     transform: "translateX(3px)",
                   },
-                  
                 })}
               >
                 <ListItemIcon
@@ -133,83 +141,85 @@ function MainDrawer(props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          boxShadow:"none",
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+        <Box sx={{ display: "flex" }}>
+          <CssBaseline />
+          <AppBar
+            position="fixed"
+            sx={{
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+              ml: { sm: `${drawerWidth}px` },
+              boxShadow: "none",
+            }} >
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { sm: "none" } }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Box sx={{display:'flex' , flexGrow: 1 , flexDirection:'row' , justifyContent:"space-between"}}>
+              <Typography variant="h6" noWrap component="div">
+                Responsive drawer
+              </Typography>
+              <SplitButton />
+              </Box>
+            </Toolbar>
+          </AppBar>
+          <Box
+            component="nav"
+            sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+            aria-label="mailbox folders"
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onTransitionEnd={handleDrawerTransitionEnd}
-          onClose={handleDrawerClose}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          slotProps={{
-            root: {
-              keepMounted: true, // Better open performance on mobile.
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          mt: "65px",
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Box className="main-Box">{props.children}</Box>
-      </Box>
-    </Box>
+            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+            <Drawer
+              container={container}
+              variant="temporary"
+              open={mobileOpen}
+              onTransitionEnd={handleDrawerTransitionEnd}
+              onClose={handleDrawerClose}
+              sx={{
+                display: { xs: "block", sm: "none" },
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  width: drawerWidth,
+                },
+              }}
+              slotProps={{
+                root: {
+                  keepMounted: true, // Better open performance on mobile.
+                },
+              }}
+            >
+              {drawer}
+            </Drawer>
+            <Drawer
+              variant="permanent"
+              sx={{
+                display: { xs: "none", sm: "block" },
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  width: drawerWidth,
+                },
+              }}
+              open
+            >
+              {drawer}
+            </Drawer>
+          </Box>
+          <Box
+            component="main"
+            sx={{
+              flexGrow: 1,
+              mt: "65px",
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+            }}
+          >
+            <Box className="main-Box">{props.children}</Box>
+          </Box>
+        </Box>
   );
 }
 

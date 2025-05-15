@@ -10,7 +10,8 @@ const Secure = ({ children }) => {
   useEffect(() => {
     const checkToken = () => {
       setLoading(true);
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
+      const token = "sasdkihhjygDgyudfsfj8sffjfmsfodjjf";
       if (!token) {
         navigate("/");
       } else {

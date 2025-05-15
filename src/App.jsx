@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import "./App.css";
 import NotFoundPage from "./pages/NotFoundPage";
 import Secure from "./components/Secure";
+import Profile from "./pages/Profile";
 
 const AppContent = () => {
   const { loading } = useLoader();
@@ -23,6 +24,7 @@ const AppContent = () => {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/dashboard" element={<Secure><Dashboard /></Secure>} />
         <Route path="/product" element={<Secure><ProductDetail /></Secure>} />
+        <Route path="/profile" element={<Secure><Profile/></Secure>} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>

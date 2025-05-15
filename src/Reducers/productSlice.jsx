@@ -5,19 +5,32 @@ const productSlice = createSlice({
   initialState : {
     productDetail : [] ,
     token : "",
+    viewDetail : {}
   },
   reducers: {
-    setToken : (state , action) => {
-      console.log("action token =",action);
-      state.token = action.payload;
-    } ,
-    setProducts: (state, action) => {
-      console.log("action =",action);
-      console.log("state = ",state)
-      state.productDetail = action.payload;
-    },
+  setToken: (state, action) => {
+    state.token = action.payload;
   },
+  setProducts: (state, action) => {
+    state.productDetail = action.payload;
+  },
+  addProduct: (state, action) => {
+    state.productDetail.push(action.payload);
+  },
+  updateProduct: (state, action) => {
+    const index = state.productDetail.findIndex(p => p.id === action.payload.id);
+    if (index !== -1) {
+      state.productDetail[index] = action.payload;
+    }
+  },
+  deleteProduct: (state, action) => {
+    state.productDetail = state.productDetail.filter(p => p.id !== action.payload);
+  },
+  setViewData: (state, action) => {
+    state.viewDetail = action.payload;
+  },
+}
 });
 
-export const { setProducts , setToken } = productSlice.actions;
+export const { setProducts, setToken, addProduct, updateProduct, deleteProduct, setViewData } = productSlice.actions;
 export default productSlice.reducer;

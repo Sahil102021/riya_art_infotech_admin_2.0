@@ -10,7 +10,9 @@ import {
   IconButton,
 } from "@mui/material";
 import { useFormik } from "formik";
-import CancelIcon from '@mui/icons-material/Cancel';
+import CancelIcon from "@mui/icons-material/Cancel";
+import { useDispatch } from "react-redux";
+import { addProduct, updateProduct } from "../../Reducers/productSlice";
 
 const style = {
   position: "absolute",
@@ -26,16 +28,33 @@ const style = {
 
 const imageFormats = ["image/png", "image/svg+xml", "image/jpeg"];
 
-export default function BasicModalAddForm() {
+export default function BasicModalAddForm({
+  buttonName,
+  type,
+  id,
+  name,
+  variant,
+  size,
+  sx,
+  editData = null,
+  mode = "add",
+}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const dispatch = useDispatch();
 
   const formik = useFormik({
-    initialValues: {
+    initialValues: editData || {
       id: "",
       title: "",
       description: "",
+      type: "",
+      date: "",
+      programinglanguage: "",
+      framework: "",
+      database: "",
+      category: "",
       price: "",
       rating: "",
       review: "",
@@ -43,10 +62,15 @@ export default function BasicModalAddForm() {
       sku: "",
       imges: [],
     },
+    enableReinitialize: true,
     onSubmit: (values) => {
-      console.log("Form Values:", values);
-      alert(JSON.stringify(values, null, 2));
-      console.log(values.imges);
+      console.log(alert(JSON.stringify(values)));
+      if (mode === "add") {
+        dispatch(addProduct(values));
+      } else if (mode === "update") {
+        dispatch(updateProduct(values));
+      }
+      handleClose();
     },
   });
 
@@ -55,21 +79,34 @@ export default function BasicModalAddForm() {
     const validFiles = files.filter((file) => imageFormats.includes(file.type));
     formik.setFieldValue("imges", validFiles);
   };
-
+// console.log(editData);
   return (
     <div>
-      <Button variant="outlined" onClick={handleOpen}>
-        Add New Product
+      <Button
+        variant={variant}
+        onClick={handleOpen}
+        type={type}
+        id={id}
+        name={name}
+        size={size}
+        sx={sx} >
+        {buttonName}
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-          <Box sx={{display:"flex" , justifyContent:"space-between" , alignItems : "center"}} >
-          <Typography variant="h6" gutterBottom>
-            Add New Product
-          </Typography>
-          <IconButton aria-label="Cancel" onClick={handleClose}>
-            <CancelIcon />
-          </IconButton>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              {mode === "add" ? "Add New Product" : "Update Product"}
+            </Typography>
+            <IconButton aria-label="Cancel" onClick={handleClose}>
+              <CancelIcon />
+            </IconButton>
           </Box>
           <Divider sx={{ mb: 2 }} />
           <form onSubmit={formik.handleSubmit}>
@@ -78,6 +115,12 @@ export default function BasicModalAddForm() {
                 ["id", "ID"],
                 ["title", "Title"],
                 ["price", "Price"],
+                ["type", "Type"],
+                ["category", "Category"],
+                ["date", "Date"],
+                ["programinglanguage", "Programing Language"],
+                ["framework", "Framework"],
+                ["database", "Database"],
                 ["rating", "Rating"],
                 ["review", "Review"],
                 ["keyFeture", "Key Feature"],
@@ -110,7 +153,7 @@ export default function BasicModalAddForm() {
                   />
                 </Button>
                 <Typography variant="caption" color="textSecondary">
-                  {formik.values.imges.length} file(s) selected
+                  {formik?.values?.imges?.length || 0} file(s) selected
                 </Typography>
               </Grid>
 
@@ -130,9 +173,14 @@ export default function BasicModalAddForm() {
                 />
               </Grid>
             </Grid>
-            <Box mt={3} display="flex" justifyContent="flex-end">
+            <Box
+              mt={3}
+              display="flex"
+              justifyContent="flex-end"
+              sx={mode === "view" ? { display: "none" } : {}}
+            >
               <Button variant="contained" type="submit">
-                Upload
+                {mode === "add" ? "Add Product" : "Update Product"}
               </Button>
             </Box>
           </form>
