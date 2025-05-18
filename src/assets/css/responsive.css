@@ -1,0 +1,126 @@
+@media (min-width: 992px) {
+  :root {
+    --container-size: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --container-size: 1120px;
+    --section-space: 60px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --container-size: 1180px;
+  }
+}
+
+@media (min-width: 1350px) {
+  :root {
+    --container-size: 1240px;
+  }
+}
+
+@media (min-width: 1400px) {
+  :root {
+    --container-size: 1340px;
+  }
+}
+
+@media (min-width: 1600px) {
+  :root {
+    --container-size: 1470px;
+  }
+}
+
+@media (min-width: 1680px) {
+  :root {
+    --container-size: 1600px;
+  }
+}
+
+/* CONTAINERS END */
+
+@media (max-width: 1799px) {
+}
+
+@media (max-width: 1599px) {
+}
+
+@media (max-width: 1399px) {
+  .font-size-xxs { font-size: 12px; }
+  .font-size-xs  { font-size: 14px; }
+  .font-size-sm  { font-size: 16px; }
+  .font-size-md  { font-size: 18px; }
+  .font-size-lg  { font-size: 20px; }
+  .font-size-xl  { font-size: 24px; }
+  .font-size-2xl { font-size: 28px; }
+  .font-size-3xl { font-size: 36px; }
+  .font-size-4xl { font-size: 48px; }
+  .font-size-5xl { font-size: 56px; }
+}
+
+@media (max-width: 1279px) {
+}
+
+@media (min-width: 1200px) {
+
+}
+
+
+
+/* ≤ 1199px (large tablets, small laptops) */
+@media (max-width: 1199px) {
+   :root {
+    --section-space: 40px;
+  }
+
+}
+
+/* ≤ 991px (tablets) */
+@media (max-width: 991px) {
+   :root {
+    --container-size: 100%;
+    --header-height: 60px;
+  }
+  .font-size-lg  { font-size: 18px; }
+  .font-size-xl  { font-size: 20px; }
+  .font-size-2xl { font-size: 24px; }
+  .font-size-3xl { font-size: 30px; }
+  .font-size-4xl { font-size: 42px; }
+  .font-size-5xl { font-size: 48px; }
+}
+
+/* ≤ 767px (phones) */
+@media (max-width: 767px) {
+
+  .font-size-xs  { font-size: 14px; }
+  .font-size-sm  { font-size: 14px; }
+  .font-size-md  { font-size: 16px; }
+  .font-size-lg  { font-size: 16px; }
+  .font-size-xl  { font-size: 18px; }
+  .font-size-2xl { font-size: 20px; }
+  .font-size-3xl { font-size: 24px; }
+  .font-size-4xl { font-size: 32px; }
+  .font-size-5xl { font-size: 36px; }
+}
+
+/* ≤ 575px (small phones) */
+@media (max-width: 575px) {
+   :root {
+    --section-space: 30px;
+  }
+  .font-size-md  { font-size: 14px; }
+  .font-size-lg  { font-size: 14px; }
+  .font-size-xl  { font-size: 16px; }
+  .font-size-2xl { font-size: 18px; }
+  .font-size-3xl { font-size: 20px; }
+  .font-size-4xl { font-size: 24px; }
+  .font-size-5xl { font-size: 28px; }
+}
+
+
+
+/* DEFAULT RESPONSIVE END */

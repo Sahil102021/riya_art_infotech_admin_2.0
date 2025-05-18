@@ -1,0 +1,64 @@
+@font-face {
+    font-family: '42dot Sans';
+    src: url('../fonts/42dotSans-Light.woff2') format('woff2'),
+        url('../fonts/42dotSans-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: '42dot Sans';
+    src: url('../fonts/42dotSans-ExtraBold.woff2') format('woff2'),
+        url('../fonts/42dotSans-ExtraBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: '42dot Sans';
+    src: url('../fonts/42dotSans-Bold.woff2') format('woff2'),
+        url('../fonts/42dotSans-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: '42dot Sans';
+    src: url('../fonts/42dotSans-Medium.woff2') format('woff2'),
+        url('../fonts/42dotSans-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: '42dot Sans';
+    src: url('../fonts/42dotSans-Regular.woff2') format('woff2'),
+        url('../fonts/42dotSans-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Mauline';
+    src: url('../fonts/Mauline-Regular.woff2') format('woff2'),
+        url('../fonts/Mauline-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ballega';
+    src: url('../fonts/BallegaRegular.woff2') format('woff2'),
+        url('../fonts/BallegaRegular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
