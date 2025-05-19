@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import MainDrawer from "../MainPage/MainDrawer";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -15,17 +14,24 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useDispatch, useSelector } from "react-redux";
+
+import MainDrawer from "../MainPage/MainDrawer";
 import BasicModalAddForm from "../components/BasicModalAddForm/BasicModalAddForm";
 import { productDataList } from "../coansta/consta";
 import { riicon } from "../coansta/icon";
-import { productDataGet } from "../actions/products";
+import {
+  productDataGet,
+  ProductDetailDelete,
+  ProductDetailSearch,
+} from "../actions/products";
 import { setProducts } from "../Reducers/productSlice";
+import { useLoader } from "../context/Context";
 
 const ProductDetail = () => {
+  const [search, setSearch] = useState({ search: "" });
   const productData = useSelector((state) => state.product.productDetail);
   const dispatch = useDispatch();
-
-  console.log("productData = ", productData.data)
+  const { setLoading } = useLoader();
 
   useEffect(() => {
     const getData = async () => {
@@ -33,7 +39,20 @@ const ProductDetail = () => {
       dispatch(setProducts(data));
     };
     getData();
-  }, [dispatch]);
+  }, [dispatch, setLoading]);
+
+  const handleSearch = async (e) => {
+    const updatedSearch = {...search, search: e.target.value};
+    setSearch(updatedSearch);
+    try {
+      const result = await ProductDetailSearch(updatedSearch);
+      console.log(result);
+      // console.log(updatedSearch);
+      // dispatch(setProducts(result));
+    } catch (err) {
+      console.error("Search error:", err);
+    }
+  };
 
   return (
     <MainDrawer>
@@ -41,12 +60,7 @@ const ProductDetail = () => {
       <section>
         <Box
           className="dashbord-padding-page"
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+          sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} >
           <Typography variant="h6">Product Detail Page</Typography>
           <BasicModalAddForm variant="outlined" buttonName="Add New Product" />
         </Box>
@@ -58,9 +72,12 @@ const ProductDetail = () => {
         <Box
           className="dashbord-padding-page"
           display="grid"
-          gridTemplateColumns={{ xs: "1fr", sm: "1fr 1fr", md: "repeat(3, 1fr)" }}
-          gap={1}
-        >
+          gridTemplateColumns={{
+            xs: "1fr",
+            sm: "1fr 1fr",
+            md: "repeat(3, 1fr)",
+          }}
+          gap={1} >
           <Typography>Total Product List: {productData?.length}</Typography>
           <Typography>Category: Business</Typography>
           <Typography>Images: Hosted</Typography>
@@ -85,6 +102,8 @@ const ProductDetail = () => {
               type="text"
               placeholder="Search"
               className="font-primary font-size-xs"
+              value={search.search}
+              onChange={handleSearch}
               style={{ border: "none", outline: "0", flex: 1 }}
             />
             <IconButton size="small">
@@ -103,8 +122,7 @@ const ProductDetail = () => {
               sx={{
                 maxHeight: 570,
                 width: { xs: "480px", sm: "574px", md: "767px", lg: "100%" },
-              }}
-            >
+              }} >
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
@@ -113,8 +131,7 @@ const ProductDetail = () => {
                         key={i}
                         align="center"
                         sx={{ px: 1, fontWeight: 600 }}
-                        className="tablecell-custome"
-                      >
+                        className="tablecell-custome" >
                         {el.name}
                       </TableCell>
                     ))}
@@ -162,7 +179,7 @@ const ProductDetail = () => {
                           <Button
                             size="small"
                             color="error"
-                            onClick={() => dispatch(deleteProduct(product.id))}
+                            onClick={() => ProductDetailDelete(product._id)}
                           >
                             {riicon.DeleteIcon}
                           </Button>

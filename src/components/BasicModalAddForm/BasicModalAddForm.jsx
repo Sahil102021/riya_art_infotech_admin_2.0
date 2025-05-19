@@ -13,7 +13,10 @@ import { useFormik } from "formik";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { ProductDetailCreate, ProductDetailUpdate } from "../../actions/products";
+import {
+  ProductDetailCreate,
+  ProductDetailUpdate,
+} from "../../actions/products";
 
 const style = {
   position: "absolute",
@@ -27,7 +30,13 @@ const style = {
   p: 4,
 };
 
-const imageFormats = ["image/png", "image/svg+xml", "image/jpeg", "image/jpg", "image/webp"];
+const imageFormats = [
+  "image/png",
+  "image/svg+xml",
+  "image/jpeg",
+  "image/jpg",
+  "image/webp",
+];
 
 export default function BasicModalAddForm({
   buttonName,
@@ -64,23 +73,26 @@ export default function BasicModalAddForm({
       images: [],
     },
     enableReinitialize: true,
-    onSubmit: async (values) => {
-      const uploadedImages = values.images.map((file) => file.name);
-      console.log(values.images);
-      const payload = {
-        ...values,
-        images: values.images,
-      };
-      console.log(editData)
+    onSubmit: async (values, { resetForm }) => {
+      const formData = new FormData();
+      Object.entries(values).forEach( async ([key, value]) => {
+        if (key === "images" && value.length > 0) {
+        await  value.forEach((img) => formData.append("images", img));
+        } else {
+        await  formData.append(key, value);
+        }
+      });
+     await console.log(formData);
       try {
         if (mode === "add") {
-          await ProductDetailCreate(payload);
+          await ProductDetailCreate(formData);
         } else if (mode === "update") {
-          await ProductDetailUpdate(editData._id,payload);
+          await ProductDetailUpdate(editData._id, formData);
         }
+        resetForm();
         handleClose();
       } catch (error) {
-        console.error("Product submission error", error);
+        console.log("Product submission error", error);
       }
     },
   });
@@ -107,11 +119,7 @@ export default function BasicModalAddForm({
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
+            sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
           >
             <Typography variant="h6">
               {mode === "add" ? "Add New Product" : "Update Product"}
@@ -120,9 +128,10 @@ export default function BasicModalAddForm({
               <CancelIcon />
             </IconButton>
           </Box>
+
           <Divider sx={{ mb: 2 }} />
 
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
             <Grid container spacing={2}>
               {[
                 ["title", "Title"],
@@ -139,7 +148,7 @@ export default function BasicModalAddForm({
                 ["sku", "SKU"],
                 ["keyfeture", "Key Features"],
               ].map(([fieldName, label]) => (
-                <Grid item size={{xs:12 , sm:6}} key={fieldName}>
+                <Grid item xs={12} sm={6} key={fieldName}>
                   <TextField
                     fullWidth
                     variant="outlined"
@@ -154,13 +163,13 @@ export default function BasicModalAddForm({
                 </Grid>
               ))}
 
-              <Grid item size={{xs:12 , sm:6}}>
+              <Grid item xs={12} sm={6}>
                 <Button variant="outlined" component="label" fullWidth>
                   Upload Images
                   <input
                     hidden
                     type="file"
-                    accept="image/*"
+                    accept={imageFormats.join(",")}
                     multiple
                     onChange={handleImageChange}
                   />
@@ -170,7 +179,7 @@ export default function BasicModalAddForm({
                 </Typography>
               </Grid>
 
-              <Grid item size={12}>
+              <Grid item xs={12}>
                 <TextField
                   fullWidth
                   multiline
